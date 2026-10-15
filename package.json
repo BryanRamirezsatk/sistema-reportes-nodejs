@@ -1,0 +1,26 @@
+{
+  "name": "sistema-reportes",
+  "version": "1.0.0",
+  "description": "Sistema web que permitirá a los estudiantes de una institución\r registrar reportes sobre diferentes problemas que se presenten\r dentro de la institución.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BryanRamirezsatk/sistema-reportes.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BryanRamirezsatk/sistema-reportes/issues"
+  },
+  "homepage": "https://github.com/BryanRamirezsatk/sistema-reportes#readme",
+  "dependencies": {
+    "express": "^5.3.0"
+  }
+}

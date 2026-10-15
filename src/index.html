@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sistema de Reportes</title>
+        <!-- Icono de la pestaña del navegador -->
+        <link rel="icon" type="image/png" href="css/ITCJ escudo fondo y letras en rojo.png">
+        <link rel="stylesheet" href="css/estilos.css">
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/lucide-static@latest/font/lucide.css"
+        >
+    </head>
+    <body>
+        <!-- Primera capa del fondo -->
+        <div id="fondoDinamico"></div>
+        <!-- Segunda capa para realizar la transición -->
+        <div id="fondoSiguiente"></div>
+        <div id="usuarioActivo" hidden></div>
+        <!-- primer panel del login -->
+        <section id="login">
+            <form id="formulario" class="tarjeta-login">
+                <div class="encabezado-login">
+                    <img
+                        src="css/ITCJ escudo fondo y letras en rojo.png"
+                        alt="Escudo del Instituto Tecnológico de Ciudad Juárez"
+                        class="logo-login"
+                    >
+                    <h2>Sistema de Reportes</h2>
+                    <p>Instituto Tecnológico de Ciudad Juárez</p>
+                </div>
+                <h2>Inciciar sesión</h2>
+                <label for="usuario">Usuario</label>
+                <div class="campo-login">
+                    <input
+                        type="text"
+                        id="usuario"
+                        placeholder="Ingresa tu usuario"
+                    >
+                    <i class="icon icon-user-round" aria-hidden="true"></i>
+                </div>
+                <label for="contrasena">NIP / Contraseña</label>
+                <div class="campo-login">
+                    <input
+                        type="password"
+                        id="contrasena"
+                        placeholder="Ingresa tu contraseña / NIP"
+                    >
+                    <button
+                        type="button"
+                        id="mostrarContrasena"
+                        class="boton-ojo"
+                        aria-label="Mostrar contraseña"
+                        aria-pressed="false"
+                    >
+                        <i class="icon icon-eye" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <button type="submit">INICIAR SESION</button>
+                <div id="mensajeDeError"></div>
+            </form>
+        </section>
+        <!-- panel des estudiante cuando inicie sesion -->
+        <section id="panelEstudiante" hidden>
+            <div class="encabezado-panel">
+                <h2>Bienvenido al Sistema de Reportes</h2>
+                <p>Selecciona la acción que deseas realizar</p>
+            </div>
+            <div class="opciones-panel">
+                <button type="button" id="crearReporte" class="tarjeta-opcion">
+                    <i class="icon icon-file-plus-2" aria-hidden="true"></i>
+                    <span>Crear nuevo reporte</span>
+                    <small>Registrar una nueva incidencia</small>
+                </button>
+                <button type="button" id="verReportes" class="tarjeta-opcion">
+                    <i class="icon icon-clipboard-list" aria-hidden="true"></i>
+                    <span>Consultar reportes</span>
+                    <small>Revisar el estado de los reportes</small>
+                </button>
+            </div>
+            <button type="button" id="cerrarSesion" class="boton-salir">
+                <i class="icon icon-log-out" aria-hidden="true"></i>
+                    Cerrar sesión
+            </button>
+        </section>    
+                <!-- panel del estudiante para ver reportes reportes -->
+        <section id="panelEstudianteReportes" hidden>
+                <!-- Encabezado de consulta -->
+            <div class="encabezado-consulta">
+                <i class="icon icon-clipboard-list" aria-hidden="true"></i>
+                <h2>Consultar reportes</h2>
+                <p>Consulta el estado y seguimiento de las incidencias registradas.</p>
+            </div>
+                <!-- Buscador -->
+            <div class="buscador-consulta">
+                <label for="buscarReporte">
+                    <i class="icon icon-search" aria-hidden="true"></i>
+                        Buscar reporte:
+                </label>
+                <input
+                    type="search"
+                    id="buscarReporte"
+                    placeholder="Buscar por folio, lugar, tipo o estado..."
+                    autocomplete="off"
+                >
+            </div>
+                    <!-- Listado de reportes -->
+            <ul id="listaReportes"></ul>
+                    <!-- Botón para regresar -->
+            <button type="button" id="regresar" class="boton-regresar-consulta">
+                <i class="icon icon-arrow-left" aria-hidden="true"></i>
+                Regresar
+            </button>
+        </section>
+        <!-- Esta sección comienza oculta.
+        JavaScript la mostrará cuando el usuario
+        presione el botón "Crear Nuevo Reporte". -->
+        <section id="panelCrearReporte" hidden>
+            <h2>Generar nuevo reporte</h2>
+                <!-- Formulario que recopila la información del reporte -->
+            <form id="formularioReporte">
+                <!-- Lugar donde se presenta el problema -->
+                <label for="lugarReporte">
+                    <i class="icon icon-map-pin" aria-hidden="true"></i>
+                        Lugar del problema:
+                </label>
+                <input
+                    type="text"
+                    id="lugarReporte"
+                    minlength="5"
+                    maxlength="100"
+                    required
+                    placeholder="Ej. Laboratorio de cómputo, edificio A"
+                >
+                    <!-- Clasificación del problema -->
+                <label for="tipoReporte">
+                <i class="icon icon-clipboard-list" aria-hidden="true"></i>
+                    Tipo de reporte:
+                </label>
+                <div class="contenedor-tipo-reporte">
+                    <select id="tipoReporte" required>
+                        <option value="">Seleccione una opción</option>
+                        <option value="Infraestructura">Infraestructura</option>
+                        <option value="Limpieza">Limpieza</option>
+                        <option value="Seguridad">Seguridad</option>
+                        <option value="Equipo o mobiliario">Equipo o mobiliario</option>
+                        <option value="Servicios">Servicios</option>
+                        <option value="Problema académico">Problema académico</option>
+                        <option value="Otros">Otros</option>
+                    </select>
+                    <button
+                        type="button"
+                        id="abrirTipoReporte"
+                        class="selector-personalizado"
+                        aria-haspopup="listbox"
+                        aria-expanded="false"
+                        aria-controls="opcionesTipoReporte"
+                    >
+                    <span id="textoTipoReporte">Seleccione una opción</span>
+                    <i class="icon icon-chevron-down" aria-hidden="true"></i>
+                    </button>
+                    <div id="opcionesTipoReporte" class="opciones-personalizadas" role="listbox" hidden></div>
+                </div>
+                <!-- Descripción detallada del problema -->
+                <label for="descripcionReporte">Descripción del problema:</label>
+                <textarea
+                    id="descripcionReporte"
+                    minlength="15"
+                    maxlength="300"
+                    rows="5"
+                    required
+                    placeholder="Describe qué sucedió, dónde ocurrió y cómo afecta a los estudiantes..."
+                ></textarea>
+                <!-- Evidencia fotográfica del problema -->
+                <label for="evidenciaProblema">
+                Imagen de evidencia (opcional):
+                </label>
+                <input
+                    type="file"
+                    id="evidenciaProblema"
+                    accept="image/png, image/jpeg, image/webp"
+                >
+                <div id="vistaPreviaEvidencia" hidden>
+                    <p>Vista previa de la evidencia:</p>
+                    <img
+                        id="imagenVistaPrevia"
+                        alt="Vista previa de la fotografía seleccionada"
+                    >
+                </div>
+                <!--
+                Este botón enviará el formulario.
+                Posteriormente capturaremos su evento submit
+                desde app.js para crear el objeto del reporte.
+                -->
+                <button type="submit">GENERAR REPORTE</button>
+                <!--
+                Este botón permitirá regresar al panel principal.
+                type="button" evita que envíe el formulario.
+                -->
+                <button type="button" id="regresarPanel">
+                    REGRESAR
+                </button>
+                <!-- Aquí aparecerán mensajes de error o confirmación -->
+                <div id="mensajeReporte"></div>
+            </form>
+        </section>
+        <!-- ==========================================
+            PANEL PRINCIPAL DEL ADMINISTRADOR
+        ========================================== -->
+        <section id="panelAdministrador" hidden>
+            <!-- Encabezado principal -->
+            <div class="encabezado-administrador">
+                <i class="icon icon-shield-check" aria-hidden="true"></i>
+                <h2>Panel de administración</h2>
+                <p>Selecciona la acción que deseas realizar</p>
+            </div>
+                    <!-- Opciones del administrador -->
+            <div class="opciones-administrador">
+                    <!-- Registrar alumnos o docentes -->
+                <button
+                    type="button"
+                    id="agregarUsuario"
+                    class="tarjeta-opcion-admin"
+                >
+                    <i class="icon icon-user-plus" aria-hidden="true"></i>
+                    <span>Agregar usuario</span>
+                    <small>Registrar estudiantes o docentes</small>
+                </button>
+                    <!-- Registrar administradores -->
+                <button
+                    type="button"
+                    id="agregarAdministrador"
+                    class="tarjeta-opcion-admin"
+                >
+                    <i class="icon icon-shield-plus" aria-hidden="true"></i>
+                    <span>Agregar administrador</span>
+                    <small>Crear una nueva cuenta administrativa</small>
+                </button>
+                    <!-- Consultar reportes -->
+                <button
+                    type="button"
+                    id="verReportesAdmin"
+                    class="tarjeta-opcion-admin"
+                >
+                    <i class="icon icon-clipboard-list" aria-hidden="true"></i>
+                    <span>Ver reportes</span>
+                    <small>Consultar y solucionar incidencias</small>
+                </button>
+            </div>
+            <!-- Cerrar sesión -->
+            <button
+                type="button"
+                id="cerrarSesionAdmin"
+                class="boton-salir-admin"
+            >
+                <i class="icon icon-log-out" aria-hidden="true"></i>
+                    Cerrar sesión
+            </button>
+        </section> 
+            <!-- REGISTRO DE ALUMNOS Y DOCENTES -->
+        <section id="panelAgregarUsuario" hidden>
+            <!-- Encabezado del formulario de registro -->
+            <div class="encabezado-registro">
+                <!-- Icono del usuario -->
+                <i class="icon icon-user-round-plus" aria-hidden="true"></i>
+                <!-- Título principal -->
+                <h2>Registrar nuevo usuario</h2>
+                <!-- Descripción -->
+                <p>Completa los datos para registrar un estudiante o docente.</p>
+            </div>
+            <form id="formularioNuevoUsuario">
+                <!-- Nombre completo del usuario -->
+                <label for="nuevoNombre">Nombre completo:</label>
+                <input
+                    type="text"
+                    id="nuevoNombre"
+                    required
+                >
+                <!-- Selección del tipo de usuario -->
+                <!-- ==========================================
+                    SELECCIÓN PERSONALIZADA DEL TIPO DE USUARIO
+                ========================================== -->
+                <label for="nuevoTipo">Tipo de usuario:</label>
+                <div class="selector-personalizado">
+                    <!-- Conservamos el select original para el JavaScript -->
+                    <select id="nuevoTipo" required>
+                        <option value="">Seleccione una opción</option>
+                        <option value="estudiante">Alumno</option>
+                        <option value="docente">Docente</option>
+                    </select>
+                        <!-- Botón que mostrará las opciones personalizadas -->
+                    <button
+                        type="button"
+                        id="botonTipoUsuario"
+                        class="boton-selector"
+                        aria-expanded="false"
+                        aria-controls="opcionesTipoUsuario"
+                    >
+                        <span id="textoTipoUsuario">Seleccione una opción</span>
+                        <i class="icon icon-chevron-down" aria-hidden="true"></i>
+                    </button>
+                    <!-- Opciones del menú -->
+                    <div id="opcionesTipoUsuario" class="opciones-selector" hidden>
+                        <button type="button" data-tipo="">
+                            Seleccione una opción
+                        </button>
+                        <button type="button" data-tipo="estudiante">
+                            Alumno
+                        </button>
+                        <button type="button" data-tipo="docente">
+                                Docente
+                        </button>
+                    </div>
+                </div>
+                <!-- CAMPOS EXCLUSIVOS DEL ALUMNO -->
+                <div id="camposAlumno" hidden>
+                    <label for="nuevoNumeroControl">
+                        Número de control:
+                    </label>
+                    <input
+                        type="text"
+                        id="nuevoNumeroControl"
+                    >
+                    <label for="nuevoNip">NIP:</label>
+                    <input
+                        type="password"
+                        id="nuevoNip"
+                    >
+                </div>
+                    <!-- CAMPO EXCLUSIVO DEL DOCENTE -->
+                <div id="camposDocente" hidden>
+                    <label for="nuevaContrasena">
+                        Contraseña:
+                    </label>
+                    <input
+                        type="password"
+                        id="nuevaContrasena"
+                    >
+                </div>
+                    <!-- Botón para registrar al usuario -->
+                <button type="submit">
+                    REGISTRAR USUARIO
+                </button>
+                <!-- Botón para regresar al panel administrativo -->
+                <button type="button" id="regresarAdminUsuario">
+                    REGRESAR
+                </button>
+                <!-- Aquí mostraremos los mensajes del registro -->
+                <div id="mensajeNuevoUsuario"></div>
+            </form>
+        </section>
+            <!-- Registro de adminstradores -->
+        <section id="panelAgregarAdministrador" hidden>
+            <!-- ==========================================
+                ENCABEZADO - AGREGAR ADMINISTRADOR
+            ========================================== -->
+            <div class="encabezado-registro-admin">
+                <!-- Icono de administrador -->
+                <i class="icon icon-shield-plus" aria-hidden="true"></i>
+                    <!-- Título -->
+                <h2>Registrar nuevo administrador</h2>
+                <!-- Descripción -->
+                <p>
+                    Completa los datos para crear una nueva cuenta
+                    con permisos de administración.
+                </p>
+            </div>
+            <form id="formularioNuevoAdministrador">
+                <!-- Nombre utilizado para iniciar sesión -->
+                <label for="nuevoNombreAdmin">
+                    Nombre de administrador:
+                </label>
+                <input
+                    type="text"
+                    id="nuevoNombreAdmin"
+                    required
+                >
+                <!-- Contraseña del nuevo administrador -->
+                <label for="nuevaContrasenaAdmin">
+                    Contraseña:
+                </label>
+                <input
+                    type="password"
+                    id="nuevaContrasenaAdmin"
+                    required
+                >
+                <!-- Registra al administrador -->
+                <button type="submit">
+                REGISTRAR ADMINISTRADOR
+                </button>
+                    <!-- Regresa al panel principal -->
+                <button type="button" id="regresarAdminRegistro">
+                    REGRESAR
+                </button>
+                <!-- Mensajes de validación -->
+                <div id="mensajeNuevoAdministrador"></div>
+            </form>
+        </section>
+            <!-- panel de reportes del adminstrador -->
+            <!--
+            Esta sección mostrará todos los reportes
+            registrados en nuestro array reportes.
+            -->
+        <section id="panelReportesAdmin" hidden>
+            <!-- ========================================= -->
+            <!-- ENCABEZADO - ADMINISTRACIÓN DE REPORTES -->
+            <!-- ========================================= -->
+            <div class="encabezado-reportes-admin">
+                <!-- Icono de reportes -->
+                <i class="icon icon-clipboard-list" aria-hidden="true"></i>
+                <!-- Título del panel -->
+                <h2>Administración de reportes</h2>
+                <!-- Descripción -->
+                <p>
+                    Consulta, busca y administra los reportes
+                    registrados en el sistema.
+                </p>
+            </div>
+            <label for="buscarReporteAdmin">
+                <i class="icon icon-search" aria-hidden="true"></i>
+                Buscar reporte:
+            </label>
+            <input
+                type="search"
+                id="buscarReporteAdmin"
+                placeholder="Folio, lugar, tipo o estado..."
+                autocomplete="off"
+            >
+            <!--
+            JavaScript generará un elemento li por cada
+            reporte que exista dentro del array.
+            -->
+            <ul id="listaReportesAdmin">
+            </ul>
+                <!-- Regresar al panel principal del administrador -->
+            <button type="button" id="regresarPanelAdmin" class="boton-admin-reporte">
+                REGRESAR
+            </button>
+        </section>
+        <!-- panel para solucionar reporte -->
+        <section id="panelSolucionReporte" hidden>
+            <h2>Solucionar reporte</h2>
+            <!--
+            Aquí mostraremos la información del reporte
+            que el administrador haya seleccionado.
+            -->
+            <div id="informacionReporte">
+                <p>Folio: <span id="solucionFolio"></span></p>
+                <p>Lugar: <span id="solucionLugar"></span></p>
+                <p>Tipo: <span id="solucionTipo"></span></p>
+                <p>Descripción:
+                    <span id="solucionDescripcion"></span>
+                </p>
+                <p>Estado actual:
+                    <span id="solucionEstado"></span>
+                </p>
+                <p>Fecha límite:
+                    <span id="solucionFechaLimite"></span>
+                </p>
+                <div id="evidenciaOriginalAdmin"></div>
+            </div>
+                <!-- Formulario para registrar la solución -->
+            <form id="formularioSolucion">
+                <label for="textoSolucion">
+                    Describa la solución realizada:
+                </label>
+                <!--
+                El administrador debe escribir una solución
+                de entre 15 y 300 caracteres.
+                -->
+                <textarea
+                    id="textoSolucion"
+                    minlength="15"
+                    maxlength="300"
+                    rows="5"
+                    placeholder="Ej. Se realizó una revisión del área afectada, se corrigió el problema reportado y se verificó que las instalaciones funcionan correctamente."
+                    required
+                ></textarea>
+                <!-- Evidencia fotográfica de la solución -->
+                <label for="evidenciaSolucion">
+                    Imagen de la solución (obligatorio):
+                </label>
+                <input
+                    type="file"
+                    id="evidenciaSolucion"
+                    accept="image/png, image/jpeg, image/webp"
+                    required               
+                    >
+                    <!-- Vista previa de la imagen seleccionada -->
+                <div id="vistaPreviaSolucion" hidden>
+                    <p>Vista previa de la solución:</p>
+                    <img
+                        id="imagenPreviaSolucion"
+                        alt="Vista previa de la evidencia de solución"
+                    >
+                </div>
+                <!-- Guardará la solución del reporte seleccionado -->
+                <button type="submit">
+                    GUARDAR SOLUCIÓN
+                </button>
+                <!-- Regresar sin guardar cambios -->
+                <button type="button" id="cancelarSolucion">
+                    CANCELAR
+                </button>
+                <!-- Mensajes de error o confirmación -->
+                <div id="mensajeSolucion"></div>
+            </form>
+        </section>
+        <script src="js/datos.js"></script>
+        <script src="js/app.js"></script>
+        <!-- Notificación flotante de confirmación -->
+        <div id="notificacionReporte" class="notificacion-reporte" role="status" aria-live="polite"></div>
+    </body>
+</html>

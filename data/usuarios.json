@@ -1,0 +1,13 @@
+[
+  {
+    "nombre": "Bryan Palasios",
+    "numeroControl": "12730221",
+    "nip": "1234",
+    "tipo": "estudiante"
+  },
+  {
+    "nombre": "Ana Villegaz",
+    "contrasena" : "Soltrue",
+    "tipo" : "docente"
+  }
+]
